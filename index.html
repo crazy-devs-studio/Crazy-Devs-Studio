@@ -15,15 +15,18 @@
     <!-- Slick Carousel CSS -->
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick-theme.css"/>
+    <!-- Animate On Scroll -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     <style>
         /* Estilos globais */
         body {
             font-family: 'Open Sans', sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #1e1e2f; /* Fundo escuro moderno */
-            color: #ffffff; /* Texto branco */
+            background-color: #1e1e2f;
+            color: #ffffff;
             line-height: 1.6;
+            overflow-x: hidden;
         }
 
         h1, h2, h3 {
@@ -33,6 +36,40 @@
         a {
             text-decoration: none;
             color: inherit;
+        }
+
+        /* Loading Screen */
+        #loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #1e1e2f;
+            z-index: 9999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        .pixel-spinner {
+            width: 50px;
+            height: 50px;
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        .pixel-spinner-inner {
+            width: 100%;
+            height: 100%;
+            background-color: #FF4500;
+            animation: pixel-spinner 2s infinite ease;
+        }
+
+        @keyframes pixel-spinner {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(0.5); opacity: 0.5; }
         }
 
         /* Cabeçalho */
@@ -59,12 +96,14 @@
             height: 60px;
             border-radius: 50%;
             object-fit: cover;
+            animation: floating 3s ease-in-out infinite;
         }
 
         .logo h1 {
             margin: 0;
             font-size: 2em;
-            color: #FF4500; /* Laranja vibrante */
+            color: #FF4500;
+            text-shadow: 0 0 10px rgba(255, 69, 0, 0.5);
         }
 
         .logo p {
@@ -85,10 +124,26 @@
             color: white;
             font-weight: bold;
             transition: color 0.3s;
+            position: relative;
+        }
+
+        nav ul li a:after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            background: #FF4500;
+            bottom: -5px;
+            left: 0;
+            transition: width 0.3s;
         }
 
         nav ul li a:hover {
-            color: #FF4500; /* Laranja vibrante ao passar o mouse */
+            color: #FF4500;
+        }
+
+        nav ul li a:hover:after {
+            width: 100%;
         }
 
         /* Botão do Menu Hamburguer */
@@ -99,6 +154,11 @@
             color: white;
             font-size: 24px;
             cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        #mobile-menu-button:hover {
+            transform: rotate(90deg);
         }
 
         /* Responsividade do Header */
@@ -137,18 +197,48 @@
 
         /* Hero Section */
         #hero {
-            background: rgba(0, 0, 0, 0.5);
-            padding: 150px 20px;
+            height: 100vh;
             text-align: center;
             color: white;
             position: relative;
             overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #hero:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1;
+        }
+
+        #hero-video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: 800px;
+            padding: 0 20px;
         }
 
         #hero h2 {
-            font-size: 3em;
+            font-size: 3.5em;
             margin: 0;
             animation: fadeIn 2s ease-in-out;
+            text-shadow: 0 0 10px rgba(0, 0, 0, 0.8);
         }
 
         #hero p {
@@ -162,20 +252,56 @@
             justify-content: center;
             gap: 20px;
             margin-top: 30px;
+            flex-wrap: wrap;
         }
 
         .cta-button {
             background: #FF4500;
             color: white;
             padding: 15px 30px;
-            border-radius: 5px;
+            border-radius: 50px;
             font-size: 1.2em;
-            transition: background 0.3s ease, transform 0.3s ease;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            border: none;
+            cursor: pointer;
+            z-index: 1;
+        }
+
+        .cta-button:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: 0.5s;
+            z-index: -1;
         }
 
         .cta-button:hover {
             background: #E03E00;
-            transform: scale(1.1);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(255, 69, 0, 0.4);
+        }
+
+        .cta-button:hover:before {
+            left: 100%;
+        }
+
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+
+        .secondary {
+            background: transparent;
+            border: 2px solid #FF4500;
+        }
+
+        .secondary:hover {
+            background: rgba(255, 69, 0, 0.1);
         }
 
         /* Carrossel de Jogos */
@@ -188,83 +314,193 @@
         .game-carousel div {
             position: relative;
             margin: 0 10px;
+            border-radius: 15px;
+            overflow: hidden;
+            transition: transform 0.3s;
+        }
+
+        .game-carousel div:hover {
+            transform: scale(1.02);
         }
 
         .game-carousel iframe {
             width: 100%;
-            height: 400px;
+            height: 500px;
             border: none;
-            border-radius: 10px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
         }
 
         .game-carousel div h3 {
             position: absolute;
-            bottom: 20px;
-            left: 20px;
+            bottom: 30px;
+            left: 30px;
             color: white;
-            font-size: 2em;
-            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
+            font-size: 2.5em;
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.8);
+            background: rgba(255, 69, 0, 0.7);
+            padding: 5px 15px;
+            border-radius: 5px;
+        }
+
+        .slick-prev:before, .slick-next:before {
+            color: #FF4500 !important;
+            font-size: 30px !important;
+        }
+
+        .slick-dots li button:before {
+            color: white !important;
+            opacity: 0.5 !important;
+        }
+
+        .slick-dots li.slick-active button:before {
+            color: #FF4500 !important;
+            opacity: 1 !important;
         }
 
         /* Seção de Destaques */
         .destaques {
             background: rgba(31, 31, 31, 0.8);
-            padding: 60px 20px;
+            padding: 80px 20px;
             text-align: center;
+            position: relative;
         }
 
         .destaques h2 {
             font-size: 2.5em;
             color: #FF4500;
             margin-bottom: 40px;
+            text-shadow: 0 0 10px rgba(255, 69, 0, 0.3);
         }
 
         .destaques .game-list {
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
-            gap: 20px;
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
         }
 
         .destaques .game-item {
-            background: rgba(0, 0, 0, 0.5);
-            border-radius: 10px;
-            padding: 20px;
-            width: 300px;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            background: rgba(0, 0, 0, 0.7);
+            border-radius: 15px;
+            padding: 0;
+            width: 320px;
+            transition: all 0.5s ease;
+            transform-style: preserve-3d;
+            box-shadow: 0 10px 20px rgba(255, 69, 0, 0.2);
+            position: relative;
+            overflow: hidden;
+            perspective: 1000px;
+        }
+
+        .destaques .game-item:before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, #FF4500, #FF8C00);
+            z-index: -1;
+            transform: skew(2deg, 2deg);
+            transition: all 0.5s ease;
         }
 
         .destaques .game-item:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 4px 15px rgba(255, 69, 0, 0.3);
+            transform: translateY(-10px) rotateX(5deg) rotateY(5deg);
+            box-shadow: 0 15px 30px rgba(255, 69, 0, 0.4);
+        }
+
+        .destaques .game-item:hover:before {
+            transform: skew(5deg, 5deg);
         }
 
         .destaques .game-item img {
             width: 100%;
             height: 200px;
             object-fit: cover;
-            border-radius: 10px;
+            transition: transform 0.5s;
+        }
+
+        .destaques .game-item:hover img {
+            transform: scale(1.1);
+        }
+
+        .destaques .game-item .game-info {
+            padding: 20px;
         }
 
         .destaques .game-item h3 {
             font-size: 1.5em;
             margin: 15px 0 10px;
             color: #FF4500;
+            transition: color 0.3s;
+        }
+
+        .destaques .game-item:hover h3 {
+            color: #FF8C00;
         }
 
         .destaques .game-item p {
             font-size: 1em;
             color: #e0e0e0;
+            margin-bottom: 15px;
+        }
+
+        .buy-button {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(45deg, #FF4500, #FF8C00);
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 50px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-block;
+        }
+
+        .buy-button:after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -60%;
+            width: 200%;
+            height: 200%;
+            background: rgba(255,255,255,0.2);
+            transform: rotate(30deg);
+            transition: all 0.3s;
+        }
+
+        .buy-button:hover:after {
+            left: 100%;
+        }
+
+        .buy-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(255, 69, 0, 0.4);
         }
 
         /* Rodapé */
         footer {
             background: rgba(31, 31, 31, 0.8);
-            padding: 20px;
+            padding: 40px 20px;
             text-align: center;
             color: white;
-            margin-top: 40px;
+            position: relative;
+        }
+
+        footer:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #FF4500, transparent);
         }
 
         footer a {
@@ -274,58 +510,134 @@
         }
 
         footer a:hover {
-            color: #E03E00;
+            color: #FF8C00;
+            text-shadow: 0 0 5px rgba(255, 69, 0, 0.5);
         }
 
         footer .social-icons {
-            margin-top: 10px;
+            margin-top: 20px;
         }
 
         footer .social-icons a {
-            margin: 0 10px;
+            margin: 0 15px;
             font-size: 24px;
+            display: inline-block;
+            transition: all 0.3s;
+        }
+
+        footer .social-icons a:hover {
+            transform: translateY(-5px) scale(1.2);
         }
 
         /* Animações */
         @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes floating {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+
+        /* Efeito de Neon para Títulos */
+        .neon-text {
+            color: #fff;
+            text-shadow:
+                0 0 5px #FF4500,
+                0 0 10px #FF4500,
+                0 0 20px #FF4500,
+                0 0 40px #FF8C00,
+                0 0 80px #FF8C00;
+            animation: flicker 1.5s infinite alternate;
+        }
+
+        @keyframes flicker {
+            0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% {
+                text-shadow:
+                    0 0 5px #FF4500,
+                    0 0 10px #FF4500,
+                    0 0 20px #FF4500,
+                    0 0 40px #FF8C00,
+                    0 0 80px #FF8C00;
+            }
+            20%, 24%, 55% {
+                text-shadow: none;
+            }
+        }
+
+        /* Partículas */
+        #particles-js {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: 1;
         }
     </style>
 </head>
 <body>
+    <!-- Loading Screen -->
+    <div id="loading-screen">
+        <div class="pixel-spinner">
+            <div class="pixel-spinner-inner"></div>
+        </div>
+        <p>Carregando aventuras épicas...</p>
+    </div>
+
     <header>
         <div class="logo">
             <img src="imagens/logo.png" alt="Logo Crazy Devs Studio" class="logo-img">
             <div class="logo-text">
-                <h1>Crazy Devs Studio</h1>
+                <h1 class="neon-text">Crazy Devs Studio</h1>
                 <p>Criando experiências através de jogos!</p>
             </div>
         </div>
         <button id="mobile-menu-button">
             <i class="fas fa-bars"></i>
+            <i class="fas fa-times"></i>
         </button>
         <nav>
             <ul>
-                <li><a href="index.html">Início</a></li>
-                <li><a href="sobre.html">Sobre Nós</a></li>
-                <li><a href="contato.html">Contato</a></li>
+                <li><a href="index.html" data-aos="fade-down" data-aos-delay="100">Início</a></li>
+                <li><a href="sobre.html" data-aos="fade-down" data-aos-delay="200">Sobre Nós</a></li>
+                <li><a href="contato.html" data-aos="fade-down" data-aos-delay="300">Contato</a></li>
             </ul>
         </nav>
     </header>
-
     <!-- Hero Section -->
     <section id="hero">
-        <h2>Desenvolvendo Jogos que Inspiram</h2>
-        <p>Explore nossos jogos, feitos para proporcionar momentos de diversão e entretenimento, com mecânicas interessantes e desafios envolventes.</p>
-        <div class="cta-container">
-            <a href="#destaques" class="cta-button">Conheça Nossos Jogos</a>
-            <a href="sobre.html" class="cta-button">Saiba Mais Sobre Nós</a>
+        <!-- Vídeo de fundo (substitua pelo seu) -->
+        <video autoplay muted loop id="hero-video">
+            <source src="videos/hero-trailer.mp4" type="video/mp4">
+            <!-- Fallback para imagem se vídeo não carregar -->
+            <img src="imagens/hero-backup.jpg" alt="Background Crazy Devs Studio" style="width:100%;height:100%;object-fit:cover;">
+        </video>
+        
+        <!-- Partículas flutuantes -->
+        <div id="particles-js"></div>
+        
+        <div class="hero-content">
+            <h2 data-aos="fade-down" data-aos-duration="1000">Desenvolvendo Jogos que Inspiram</h2>
+            <p data-aos="fade-up" data-aos-duration="1000" data-aos-delay="200">Explore nossos jogos, feitos para proporcionar momentos de diversão e entretenimento, com mecânicas interessantes e desafios envolventes.</p>
+            
+            <div class="cta-container" data-aos="zoom-in" data-aos-delay="400">
+                <a href="#destaques" class="cta-button pulse">Conheça Nossos Jogos ↓</a>
+                <a href="sobre.html" class="cta-button secondary">Saiba Mais Sobre Nós</a>
+            </div>
         </div>
     </section>
 
     <!-- Carrossel de Jogos com Vídeos do YouTube -->
-    <div class="game-carousel">
+    <div class="game-carousel" data-aos="fade-up">
         <div>
             <iframe src="https://www.youtube.com/embed/3qdRTxV2uqQ?autoplay=1&mute=1&loop=1&playlist=3qdRTxV2uqQ" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
             <h3>The Purifiers</h3>
@@ -338,37 +650,46 @@
 
     <!-- Seção de Destaques -->
     <section id="destaques" class="destaques">
-        <h2>Jogos em Destaque</h2>
+        <h2 data-aos="fade-up">Jogos em Destaque</h2>
         <div class="game-list">
-            <div class="game-item">
+            <div class="game-item" data-aos="fade-up" data-aos-delay="100">
                 <a href="https://crazy-devs-studio.itch.io/the-purifiers" target="_blank">
                     <img src="imagens/the-purifiers.png" alt="The Purifiers" loading="lazy">
-                    <h3>The Purifiers</h3>
-                    <p>Um jogo de sobrevivência onde você luta contra zumbis e busca uma cura para a humanidade.</p>
+                    <div class="game-info">
+                        <h3>The Purifiers</h3>
+                        <p>Um jogo de sobrevivência onde você luta contra zumbis e busca uma cura para a humanidade.</p>
+                        <button class="buy-button">Jogar Agora</button>
+                    </div>
                 </a>
             </div>
-            <div class="game-item">
+            <div class="game-item" data-aos="fade-up" data-aos-delay="200">
                 <a href="https://crazy-devs-studio.itch.io/tpa" target="_blank">
                     <img src="imagens/TPA.png" alt="TPA" loading="lazy">
-                    <h3>TPA</h3>
-                    <p>Uma aventura desafiadora onde você explora a floresta e captura fotos incríveis enquanto evita perigos.</p>
+                    <div class="game-info">
+                        <h3>TPA</h3>
+                        <p>Uma aventura desafiadora onde você explora a floresta e captura fotos incríveis enquanto evita perigos.</p>
+                        <button class="buy-button">Jogar Agora</button>
+                    </div>
                 </a>
             </div>
-            <div class="game-item">
+            <div class="game-item" data-aos="fade-up" data-aos-delay="300">
                 <a href="https://crazy-devs-studio.itch.io/ponte-geometrica" target="_blank">
                     <img src="imagens/ponte-geometrica.png" alt="Ponte Geométrica" loading="lazy">
-                    <h3>Ponte Geométrica</h3>
-                    <p>Um jogo de lógica e estratégia onde você constrói pontes para superar desafios geométricos.</p>
+                    <div class="game-info">
+                        <h3>Ponte Geométrica</h3>
+                        <p>Um jogo de lógica e estratégia onde você constrói pontes para superar desafios geométricos.</p>
+                        <button class="buy-button">Jogar Agora</button>
+                    </div>
                 </a>
             </div>
         </div>
     </section>
 
     <!-- Rodapé -->
-    <footer>
+    <footer data-aos="fade-up">
         <p>&copy; 2025 Crazy Devs Studio. Todos os direitos reservados.</p>
         <div class="social-icons">
-            <a href="https://www.instagram.com/crazy_devs_studio/" target="_blank" aria-label="Instagram">
+            <a href="https://www.instagram.com/studio_crazy_devs/" target="_blank" aria-label="Instagram" class="floating">
                 <i class="fab fa-instagram"></i>
             </a>
         </div>
@@ -377,34 +698,131 @@
     <!-- Scripts -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
     <script>
+        // Esconder loading screen quando a página carregar
+        window.addEventListener('load', function() {
+            setTimeout(function() {
+                document.getElementById('loading-screen').style.opacity = '0';
+                setTimeout(function() {
+                    document.getElementById('loading-screen').style.display = 'none';
+                }, 500);
+            }, 1500);
+        });
+
         // Menu Hamburguer
         document.getElementById('mobile-menu-button').addEventListener('click', function() {
             const navUl = document.querySelector('nav ul');
             navUl.classList.toggle('active');
+            
+            // Animação do ícone
+            const icon = this.querySelector('i');
+            if (navUl.classList.contains('active')) {
+                icon.classList.remove('fa-bars');
+                icon.classList.add('fa-times');
+            } else {
+                icon.classList.remove('fa-times');
+                icon.classList.add('fa-bars');
+            }
         });
 
         // Inicialização do Slick Carousel
         $(document).ready(function(){
             $('.game-carousel').slick({
                 autoplay: true,
-                autoplaySpeed: 3000,
+                autoplaySpeed: 5000,
                 dots: true,
                 arrows: true,
                 infinite: true,
-                speed: 500,
+                speed: 800,
                 fade: false,
-                cssEase: 'linear'
+                cssEase: 'cubic-bezier(0.645, 0.045, 0.355, 1)',
+                responsive: [
+                    {
+                        breakpoint: 768,
+                        settings: {
+                            arrows: false,
+                            dots: true
+                        }
+                    }
+                ]
             });
         });
 
-        // Scroll suave para a seção de destaques
-        document.querySelector('a[href="#destaques"]').addEventListener('click', function(event) {
-            event.preventDefault();
-            document.querySelector('#destaques').scrollIntoView({
-                behavior: 'smooth'
+        // Efeito 3D nos cards de jogos
+        document.querySelectorAll('.game-item').forEach(item => {
+            item.addEventListener('mousemove', function(e) {
+                const x = e.offsetX;
+                const y = e.offsetY;
+                const centerX = this.offsetWidth / 2;
+                const centerY = this.offsetHeight / 2;
+                
+                const angleX = (y - centerY) / 10;
+                const angleY = (centerX - x) / 10;
+                
+                this.style.transform = `perspective(1000px) rotateX(${angleX}deg) rotateY(${angleY}deg) translateY(-10px)`;
+            });
+            
+            item.addEventListener('mouseleave', function() {
+                this.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) translateY(0)';
             });
         });
+
+        // Scroll suave para links internos
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+                
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    targetElement.scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                    
+                    // Fechar menu mobile se aberto
+                    const navUl = document.querySelector('nav ul');
+                    if (navUl.classList.contains('active')) {
+                        navUl.classList.remove('active');
+                        document.getElementById('mobile-menu-button').querySelector('i').classList.remove('fa-times');
+                        document.getElementById('mobile-menu-button').querySelector('i').classList.add('fa-bars');
+                    }
+                }
+            });
+        });
+
+        // Inicializar AOS (Animate On Scroll)
+        AOS.init({
+            duration: 1000,
+            once: true,
+            easing: 'ease-in-out',
+        });
+
+        // Inicializar partículas
+        if (document.getElementById('particles-js')) {
+            particlesJS.load('particles-js', 'particles.json', function() {
+                console.log('Partículas carregadas!');
+            });
+        }
+
+        // Criar arquivo particles.json dinamicamente se não existir
+        if (typeof particlesJS !== 'undefined' && !document.querySelector('script[src*="particles.json"]')) {
+            const particlesConfig = {
+                "particles": {
+                    "number": { "value": 80, "density": { "enable": true, "value_area": 800 } },
+                    "color": { "value": "#FF4500" },
+                    "shape": { "type": "circle" },
+                    "opacity": { "value": 0.5, "random": true },
+                    "size": { "value": 3, "random": true },
+                    "line_linked": { "enable": true, "distance": 150, "color": "#FF4500", "opacity": 0.4, "width": 1 },
+                    "move": { "enable": true, "speed": 2, "direction": "none", "random": true, "straight": false, "out_mode": "out" }
+                }
+            };
+            particlesJS('particles-js', particlesConfig);
+        }
     </script>
 </body>
 </html>
