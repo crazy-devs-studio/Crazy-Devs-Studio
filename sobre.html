@@ -12,15 +12,21 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
     <!-- Ícones (Font Awesome) -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Animate On Scroll -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <!-- Slick Carousel CSS -->
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick-theme.css"/>
     <style>
         /* Estilos globais */
         body {
             font-family: 'Open Sans', sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #1e1e2f; /* Fundo escuro moderno */
-            color: #ffffff; /* Texto branco */
+            background-color: #1e1e2f;
+            color: #ffffff;
             line-height: 1.6;
+            overflow-x: hidden;
         }
 
         h1, h2, h3 {
@@ -30,6 +36,40 @@
         a {
             text-decoration: none;
             color: inherit;
+        }
+
+        /* Loading Screen */
+        #loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #1e1e2f;
+            z-index: 9999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        .pixel-spinner {
+            width: 50px;
+            height: 50px;
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        .pixel-spinner-inner {
+            width: 100%;
+            height: 100%;
+            background-color: #FF4500;
+            animation: pixel-spinner 2s infinite ease;
+        }
+
+        @keyframes pixel-spinner {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(0.5); opacity: 0.5; }
         }
 
         /* Cabeçalho */
@@ -56,12 +96,14 @@
             height: 60px;
             border-radius: 50%;
             object-fit: cover;
+            animation: floating 3s ease-in-out infinite;
         }
 
         .logo h1 {
             margin: 0;
             font-size: 2em;
-            color: #FF4500; /* Laranja vibrante */
+            color: #FF4500;
+            text-shadow: 0 0 10px rgba(255, 69, 0, 0.5);
         }
 
         .logo p {
@@ -82,10 +124,26 @@
             color: white;
             font-weight: bold;
             transition: color 0.3s;
+            position: relative;
+        }
+
+        nav ul li a:after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            background: #FF4500;
+            bottom: -5px;
+            left: 0;
+            transition: width 0.3s;
         }
 
         nav ul li a:hover {
-            color: #FF4500; /* Laranja vibrante ao passar o mouse */
+            color: #FF4500;
+        }
+
+        nav ul li a:hover:after {
+            width: 100%;
         }
 
         /* Botão do Menu Hamburguer */
@@ -96,6 +154,11 @@
             color: white;
             font-size: 24px;
             cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        #mobile-menu-button:hover {
+            transform: rotate(90deg);
         }
 
         /* Responsividade do Header */
@@ -134,37 +197,78 @@
 
         /* Hero Section */
         #hero-sobre {
-            background: rgba(0, 0, 0, 0.5);
-            padding: 150px 20px;
+            height: 70vh;
             text-align: center;
             color: white;
             position: relative;
             overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #hero-sobre:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 1;
+        }
+
+        #hero-video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: 800px;
+            padding: 0 20px;
         }
 
         #hero-sobre h2 {
-            font-size: 3em;
+            font-size: 3.5em;
             margin: 0;
-            animation: fadeIn 2s ease-in-out;
+            text-shadow: 0 0 10px rgba(0, 0, 0, 0.8);
+            color: #FF4500;
         }
 
         #hero-sobre p {
             font-size: 1.5em;
             margin: 20px 0;
-            animation: fadeIn 3s ease-in-out;
         }
 
         /* Seção "Nossa História" */
         .nossa-historia {
             background: rgba(31, 31, 31, 0.8);
-            padding: 60px 20px;
+            padding: 80px 20px;
             text-align: center;
+            position: relative;
+        }
+
+        .nossa-historia:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #FF4500, transparent);
         }
 
         .nossa-historia h2 {
             font-size: 2.5em;
             color: #FF4500;
             margin-bottom: 40px;
+            text-shadow: 0 0 10px rgba(255, 69, 0, 0.3);
         }
 
         .nossa-historia p {
@@ -177,61 +281,128 @@
         /* Seção "Nossa Equipe" */
         .nossa-equipe {
             background: rgba(0, 0, 0, 0.5);
-            padding: 60px 20px;
+            padding: 80px 20px;
             text-align: center;
+            position: relative;
         }
 
         .nossa-equipe h2 {
             font-size: 2.5em;
             color: #FF4500;
             margin-bottom: 40px;
+            text-shadow: 0 0 10px rgba(255, 69, 0, 0.3);
         }
 
         .equipe-list {
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
-            gap: 20px;
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
         }
 
         .equipe-item {
             background: rgba(31, 31, 31, 0.8);
-            border-radius: 10px;
-            padding: 20px;
-            width: 300px;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border-radius: 15px;
+            padding: 0;
+            width: 280px;
+            transition: all 0.5s ease;
+            transform-style: preserve-3d;
+            box-shadow: 0 10px 20px rgba(255, 69, 0, 0.2);
+            position: relative;
+            overflow: hidden;
+            perspective: 1000px;
+        }
+
+        .equipe-item:before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, #FF4500, #FF8C00);
+            z-index: -1;
+            transform: skew(2deg, 2deg);
+            transition: all 0.5s ease;
         }
 
         .equipe-item:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 4px 15px rgba(255, 69, 0, 0.3);
+            transform: translateY(-10px) rotateX(5deg) rotateY(5deg);
+            box-shadow: 0 15px 30px rgba(255, 69, 0, 0.4);
+        }
+
+        .equipe-item:hover:before {
+            transform: skew(5deg, 5deg);
         }
 
         .equipe-item img {
             width: 100%;
-            height: 200px;
+            height: 250px;
             object-fit: cover;
-            border-radius: 10px;
+            transition: transform 0.5s;
+            border-bottom: 2px solid #FF4500;
+        }
+
+        .equipe-item:hover img {
+            transform: scale(1.05);
+        }
+
+        .equipe-info {
+            padding: 20px;
         }
 
         .equipe-item h3 {
             font-size: 1.5em;
             margin: 15px 0 10px;
             color: #FF4500;
+            transition: color 0.3s;
+        }
+
+        .equipe-item:hover h3 {
+            color: #FF8C00;
         }
 
         .equipe-item p {
             font-size: 1em;
             color: #e0e0e0;
+            margin-bottom: 15px;
+        }
+
+        .social-equipe {
+            margin-top: 15px;
+        }
+
+        .social-equipe a {
+            color: #FF4500;
+            margin: 0 10px;
+            font-size: 1.2em;
+            transition: all 0.3s;
+        }
+
+        .social-equipe a:hover {
+            color: #FF8C00;
+            transform: translateY(-3px) scale(1.2);
         }
 
         /* Rodapé */
         footer {
             background: rgba(31, 31, 31, 0.8);
-            padding: 20px;
+            padding: 40px 20px;
             text-align: center;
             color: white;
-            margin-top: 40px;
+            position: relative;
+        }
+
+        footer:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #FF4500, transparent);
         }
 
         footer a {
@@ -241,31 +412,94 @@
         }
 
         footer a:hover {
-            color: #E03E00;
+            color: #FF8C00;
+            text-shadow: 0 0 5px rgba(255, 69, 0, 0.5);
         }
 
         footer .social-icons {
-            margin-top: 10px;
+            margin-top: 20px;
         }
 
         footer .social-icons a {
-            margin: 0 10px;
+            margin: 0 15px;
             font-size: 24px;
+            display: inline-block;
+            transition: all 0.3s;
+        }
+
+        footer .social-icons a:hover {
+            transform: translateY(-5px) scale(1.2);
         }
 
         /* Animações */
         @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes floating {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+
+        /* Efeito de Neon para Títulos */
+        .neon-text {
+            color: #fff;
+            text-shadow:
+                0 0 5px #FF4500,
+                0 0 10px #FF4500,
+                0 0 20px #FF4500,
+                0 0 40px #FF8C00,
+                0 0 80px #FF8C00;
+            animation: flicker 1.5s infinite alternate;
+        }
+
+        @keyframes flicker {
+            0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% {
+                text-shadow:
+                    0 0 5px #FF4500,
+                    0 0 10px #FF4500,
+                    0 0 20px #FF4500,
+                    0 0 40px #FF8C00,
+                    0 0 80px #FF8C00;
+            }
+            20%, 24%, 55% {
+                text-shadow: none;
+            }
+        }
+
+        /* Partículas */
+        #particles-js {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: 1;
         }
     </style>
 </head>
 <body>
+    <!-- Loading Screen -->
+    <div id="loading-screen">
+        <div class="pixel-spinner">
+            <div class="pixel-spinner-inner"></div>
+        </div>
+        <p>Conhecendo a equipe...</p>
+    </div>
+
     <header>
         <div class="logo">
             <img src="imagens/logo.png" alt="Logo Crazy Devs Studio" class="logo-img">
             <div class="logo-text">
-                <h1>Crazy Devs Studio</h1>
+                <h1 class="neon-text">Crazy Devs Studio</h1>
                 <p>Criando experiências através de jogos!</p>
             </div>
         </div>
@@ -274,75 +508,230 @@
         </button>
         <nav>
             <ul>
-                <li><a href="index.html">Início</a></li>
-                <li><a href="sobre.html">Sobre Nós</a></li>
-                <li><a href="contato.html">Contato</a></li>
+                <li><a href="index.html" data-aos="fade-down" data-aos-delay="100">Início</a></li>
+                <li><a href="sobre.html" data-aos="fade-down" data-aos-delay="200">Sobre Nós</a></li>
+                <li><a href="contato.html" data-aos="fade-down" data-aos-delay="300">Contato</a></li>
             </ul>
         </nav>
     </header>
 
     <!-- Hero Section -->
     <section id="hero-sobre">
-        <h2>Sobre Nós</h2>
-        <p>A Crazy Devs Studio é um time de estudantes focado no desenvolvimento de jogos. Recentemente formada, nossa equipe está comprometida em criar experiências de jogo interessantes e desafiadoras.</p>
+        <!-- Vídeo de fundo (substitua pelo seu) -->
+        <video autoplay muted loop id="hero-video">
+            <source src="videos/hero-background.mp4" type="video/mp4">
+            <!-- Fallback para imagem se vídeo não carregar -->
+            <img src="imagens/hero-backup.jpg" alt="Background Crazy Devs Studio" style="width:100%;height:100%;object-fit:cover;">
+        </video>
+        
+        <!-- Partículas flutuantes -->
+        <div id="particles-js"></div>
+        
+        <div class="hero-content">
+            <h2 data-aos="fade-down" data-aos-duration="1000">Sobre Nós</h2>
+            <p data-aos="fade-up" data-aos-duration="1000" data-aos-delay="200">A Crazy Devs Studio é um time de estudantes focado no desenvolvimento de jogos. Recentemente formada, nossa equipe está comprometida em criar experiências de jogo interessantes e desafiadoras.</p>
+        </div>
     </section>
 
     <!-- Seção "Nossa História" -->
-    <section class="nossa-historia">
-        <h2>Nossa História</h2>
-        <p>
+    <section class="nossa-historia" data-aos="fade-up">
+        <h2 data-aos="fade-up">Nossa História</h2>
+        <p data-aos="fade-up" data-aos-delay="200">
             A Crazy Devs Studio foi criada por um grupo de estudantes que se uniram para explorar o mundo do desenvolvimento de jogos. Desde o início, temos nos dedicado a criar jogos que combinem boas histórias e mecânicas envolventes. Estamos começando agora, mas buscamos crescer e aprimorar nossas habilidades a cada projeto.
         </p>
     </section>
 
-    <!-- Seção "Nossa Equipe" -->
-    <section class="nossa-equipe">
+   <!-- Seção "Nossa Equipe" -->
+<section class="nossa-equipe">
     <h2>Nossa Equipe</h2>
     <div class="equipe-list">
-        <div class="equipe-item">
-            <img src="imagens/misael.webp" alt="Misael Inácio - Programador/Animador" loading="lazy">
-            <h3>Misael Inácio</h3>
-            <p>Programador/Animador</p>
+        <div class="equipe-item" data-aos="fade-up" data-aos-delay="100">
+            <img src="imagens/misael.jpg" alt="Misael Inácio - Programador e Animador" loading="lazy">
+            <div class="equipe-info">
+                <h3>Misael Inácio</h3>
+                <p>Programador e Animador</p>
+                <div class="social-equipe">
+                    <a href="https://www.instagram.com/studio_crazy_devs" target="_blank" aria-label="Instagram">
+                        <i class="fab fa-instagram"></i> @studio_crazy_devs
+                    </a>
+                </div>
+            </div>
         </div>
-        <div class="equipe-item">
-            <img src="imagens/leandro.webp" alt="Leandro Henrique - Programador/Game Design" loading="lazy">
-            <h3>Leandro Henrique</h3>
-            <p>Programador/Roteirista</p>
+        <div class="equipe-item" data-aos="fade-up" data-aos-delay="200">
+            <img src="imagens/leandro.jpg" alt="Leandro Henrique - Programador e Roteirista" loading="lazy">
+            <div class="equipe-info">
+                <h3>Leandro Henrique</h3>
+                <p>Programador e Roteirista</p>
+                <div class="social-equipe">
+                    <a href="https://www.instagram.com/studio_crazy_devs" target="_blank" aria-label="Instagram">
+                        <i class="fab fa-instagram"></i> @studio_crazy_devs
+                    </a>
+                </div>
+            </div>
         </div>
-        <div class="equipe-item">
-            <img src="imagens/alisson.webp" alt="Alisson Henrique - Sonorização/Roteirista" loading="lazy">
-            <h3>Alisson Henrique</h3>
-            <p>Sonorização/Roteirista</p>
+        <div class="equipe-item" data-aos="fade-up" data-aos-delay="300">
+            <img src="imagens/alisson.jpg" alt="Alisson Henrique - Sonorização e Roteirista" loading="lazy">
+            <div class="equipe-info">
+                <h3>Alisson Henrique</h3>
+                <p>Sonorização e Roteirista</p>
+                <div class="social-equipe">
+                    <a href="https://www.instagram.com/studio_crazy_devs" target="_blank" aria-label="Instagram">
+                        <i class="fab fa-instagram"></i> @studio_crazy_devs
+                    </a>
+                </div>
+            </div>
         </div>
-        <div class="equipe-item">
-            <img src="imagens/carlos.webp" alt="Carlos Henrique - Modelador 3D" loading="lazy">
-            <h3>Carlos Henrique</h3>
-            <p>Modelador 3D</p>
+        <div class="equipe-item" data-aos="fade-up" data-aos-delay="400">
+            <img src="imagens/luciano.jpg" alt="Luciano Eduardo - Concept Art" loading="lazy">
+            <div class="equipe-info">
+                <h3>Luciano Eduardo</h3>
+                <p>Concept Art</p>
+                <div class="social-equipe">
+                    <a href="https://www.instagram.com/studio_crazy_devs" target="_blank" aria-label="Instagram">
+                        <i class="fab fa-instagram"></i> @studio_crazy_devs
+                    </a>
+                </div>
+            </div>
         </div>
-        <div class="equipe-item">
-            <img src="imagens/luciano.jpg" alt="Luciano Eduardo - Level Concept Art" loading="lazy">
-            <h3>Luciano Eduardo</h3>
-            <p>Concept Art</p>
+        <div class="equipe-item" data-aos="fade-up" data-aos-delay="500">
+            <img src="imagens/carlos.jpg" alt="Carlos Henrique - Modelador 3D" loading="lazy">
+            <div class="equipe-info">
+                <h3>Carlos Henrique</h3>
+                <p>Modelador 3D</p>
+                <div class="social-equipe">
+                    <a href="https://www.instagram.com/studio_crazy_devs" target="_blank" aria-label="Instagram">
+                        <i class="fab fa-instagram"></i> @studio_crazy_devs
+                    </a>
+                </div>
+            </div>
         </div>
     </div>
 </section>
 
     <!-- Rodapé -->
-    <footer>
+    <footer data-aos="fade-up">
         <p>&copy; 2025 Crazy Devs Studio. Todos os direitos reservados.</p>
         <div class="social-icons">
-            <a href="https://www.instagram.com/crazy_devs_studio/" target="_blank" aria-label="Instagram">
+            <a href="https://www.instagram.com/crazy_devs_studio/" target="_blank" aria-label="Instagram" class="floating">
                 <i class="fab fa-instagram"></i>
+            </a>
+            <a href="#" target="_blank" aria-label="Twitter" class="floating">
+                <i class="fab fa-twitter"></i>
+            </a>
+            <a href="#" target="_blank" aria-label="YouTube" class="floating">
+                <i class="fab fa-youtube"></i>
+            </a>
+            <a href="#" target="_blank" aria-label="Discord" class="floating">
+                <i class="fab fa-discord"></i>
             </a>
         </div>
     </footer>
 
+    <!-- Scripts -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
     <script>
+        // Esconder loading screen quando a página carregar
+        window.addEventListener('load', function() {
+            setTimeout(function() {
+                document.getElementById('loading-screen').style.opacity = '0';
+                setTimeout(function() {
+                    document.getElementById('loading-screen').style.display = 'none';
+                }, 500);
+            }, 1500);
+        });
+
         // Menu Hamburguer
         document.getElementById('mobile-menu-button').addEventListener('click', function() {
             const navUl = document.querySelector('nav ul');
             navUl.classList.toggle('active');
+            
+            // Animação do ícone
+            const icon = this.querySelector('i');
+            if (navUl.classList.contains('active')) {
+                icon.classList.remove('fa-bars');
+                icon.classList.add('fa-times');
+            } else {
+                icon.classList.remove('fa-times');
+                icon.classList.add('fa-bars');
+            }
         });
+
+        // Efeito 3D nos cards da equipe
+        document.querySelectorAll('.equipe-item').forEach(item => {
+            item.addEventListener('mousemove', function(e) {
+                const x = e.offsetX;
+                const y = e.offsetY;
+                const centerX = this.offsetWidth / 2;
+                const centerY = this.offsetHeight / 2;
+                
+                const angleX = (y - centerY) / 10;
+                const angleY = (centerX - x) / 10;
+                
+                this.style.transform = `perspective(1000px) rotateX(${angleX}deg) rotateY(${angleY}deg) translateY(-10px)`;
+            });
+            
+            item.addEventListener('mouseleave', function() {
+                this.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) translateY(0)';
+            });
+        });
+
+        // Scroll suave para links internos
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+                
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    targetElement.scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                    
+                    // Fechar menu mobile se aberto
+                    const navUl = document.querySelector('nav ul');
+                    if (navUl.classList.contains('active')) {
+                        navUl.classList.remove('active');
+                        document.getElementById('mobile-menu-button').querySelector('i').classList.remove('fa-times');
+                        document.getElementById('mobile-menu-button').querySelector('i').classList.add('fa-bars');
+                    }
+                }
+            });
+        });
+
+        // Inicializar AOS (Animate On Scroll)
+        AOS.init({
+            duration: 1000,
+            once: true,
+            easing: 'ease-in-out',
+        });
+
+        // Inicializar partículas
+        if (document.getElementById('particles-js')) {
+            particlesJS.load('particles-js', 'particles.json', function() {
+                console.log('Partículas carregadas!');
+            });
+        }
+
+        // Criar arquivo particles.json dinamicamente se não existir
+        if (typeof particlesJS !== 'undefined' && !document.querySelector('script[src*="particles.json"]')) {
+            const particlesConfig = {
+                "particles": {
+                    "number": { "value": 80, "density": { "enable": true, "value_area": 800 } },
+                    "color": { "value": "#FF4500" },
+                    "shape": { "type": "circle" },
+                    "opacity": { "value": 0.5, "random": true },
+                    "size": { "value": 3, "random": true },
+                    "line_linked": { "enable": true, "distance": 150, "color": "#FF4500", "opacity": 0.4, "width": 1 },
+                    "move": { "enable": true, "speed": 2, "direction": "none", "random": true, "straight": false, "out_mode": "out" }
+                }
+            };
+            particlesJS('particles-js', particlesConfig);
+        }
     </script>
 </body>
 </html>
